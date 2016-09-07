@@ -1,11 +1,13 @@
-GetEventIntent find event {Event}
+GetEventIntent find event {The Carole King Musical|Event}
+
+GetEventIntent find event {third eye blind|Event}
 
 GetCategoryIntent find category {Category}
 
-GetEventCategoryIntent find category type {Category} with event with name {Event} 
+GetEventCategoryIntent find category type {Category} with event with name {third eye blind|Event}
 
-GetEventTimeRangeIntent for time range of {Duration}, find event with name {Event}
+GetEventTimeRangeIntent for time range of {Duration}, find event with name {third eye blind|Event}
 
 GetCategoryTimeRangeIntent find category {Category} for time range {Duration}
 
-GetEventCategoryTimeRangeIntent find event {Event} of category type {Category} for time range {Duration}
+GetEventCategoryTimeRangeIntent find event {third eye blind|Event} of category type {Category} for time range {Duration}
