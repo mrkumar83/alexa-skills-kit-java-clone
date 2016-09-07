@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+      "intent": "GetEvent",
+    },
+    {
+      "intent": "GetCategory"
+    },
+    {
+      "intent": "GetEventCategory"
+    },
+    {
+      "intent": "GetEventTimeRange",
+    },
+    {
+      "intent": "GetCategoryTimeRange"
+    },
+    {
+      "intent": "GetEventCategoryTimeRange"
+    },
+  ]
+}
