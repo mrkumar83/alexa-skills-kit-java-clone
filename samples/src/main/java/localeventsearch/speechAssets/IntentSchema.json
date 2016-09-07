@@ -2,21 +2,77 @@
   "intents": [
     {
       "intent": "GetEvent",
+      "slots" : [
+      	{
+      		"name": "Event",
+      		"type": "AMAZON.LITERAL"
+      	}
+      ]
     },
     {
-      "intent": "GetCategory"
+      "intent": "GetCategory",
+      "slots" : [
+      	{
+      		"name": "Category",
+      		"type": "CATEGORY_LIST"
+      	}
+      ]
     },
     {
-      "intent": "GetEventCategory"
+      "intent": "GetEventCategory",
+      "slots": [
+        {
+        	"name": "Event",
+        	"type": "AMAZON.LITERAL"
+        },
+      	{
+      		"name": "Category",
+      		"type": "CATEGORY_LIST"
+      	}      
+      ]
     },
     {
       "intent": "GetEventTimeRange",
+      "slots" : [
+      	{
+      		"name": "Event",
+      		"type": "AMAZON.LITERAL"
+      	},
+      	{
+      		"name": "Duration",
+      		"type": "TIME_RANGE_LIST"
+      	}
+      ]
     },
     {
-      "intent": "GetCategoryTimeRange"
+      "intent": "GetCategoryTimeRange",
+      "slots" : [
+      	{
+      		"name": "Category",
+      		"type": "CATEGORY_LIST"
+      	},
+      	{
+      		"name": "Duration",
+      		"type": "TIME_RANGE_LIST"
+      	}
+      ]
     },
     {
-      "intent": "GetEventCategoryTimeRange"
-    },
+      "intent": "GetEventCategoryTimeRange",
+      "slots" : [
+        {
+        	"name": "Event",
+        	"type": "AMAZON.LITERAL"
+        },
+      	{
+      		"name": "Category",
+      		"type": "CATEGORY_LIST"
+      	},
+      	{
+      		"name": "Duration",
+      		"type": "TIME_RANGE_LIST"
+      	}
+      ]
+    }
   ]
 }
