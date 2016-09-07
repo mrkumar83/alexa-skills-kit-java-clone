@@ -1,0 +1,11 @@
+GetEventIntent find event {Event}
+
+GetCategoryIntent find category {Category}
+
+GetEventCategoryIntent find event {Event} of type {Category}
+
+GetEventTimeRangeIntent find event {Event} for {Duration}
+
+GetCategoryTimeRangeIntent find category {Category} for {Duration}
+
+GetEventCategoryTimeRangeIntent find event {Event} of type {Category} for {Duration}

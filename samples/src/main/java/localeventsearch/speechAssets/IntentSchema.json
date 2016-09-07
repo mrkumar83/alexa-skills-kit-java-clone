@@ -1,7 +1,7 @@
 {
   "intents": [
     {
-      "intent": "GetEvent",
+      "intent": "GetEventIntent",
       "slots" : [
       	{
       		"name": "Event",
@@ -10,7 +10,7 @@
       ]
     },
     {
-      "intent": "GetCategory",
+      "intent": "GetCategoryIntent",
       "slots" : [
       	{
       		"name": "Category",
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "intent": "GetEventCategory",
+      "intent": "GetEventCategoryIntent",
       "slots": [
         {
         	"name": "Event",
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "intent": "GetEventTimeRange",
+      "intent": "GetEventTimeRangeIntent",
       "slots" : [
       	{
       		"name": "Event",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "intent": "GetCategoryTimeRange",
+      "intent": "GetCategoryTimeRangeIntent",
       "slots" : [
       	{
       		"name": "Category",
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "intent": "GetEventCategoryTimeRange",
+      "intent": "GetEventCategoryTimeRangeIntent",
       "slots" : [
         {
         	"name": "Event",
