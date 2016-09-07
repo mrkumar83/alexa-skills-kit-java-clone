@@ -230,7 +230,7 @@ public class ScoreKeeperManager {
         // player for brevity.
         String speechText = score + " for " + playerName + ". ";
         if (game.getNumberOfPlayers() > MAX_PLAYERS_FOR_SPEECH) {
-            speechText += playerName + " has " + game.getScoreForPlayer(playerName) + " in total.";
+            speechText += playerName + " has " + game.getScoreForPlayer(playerName) + " in total. For reals.";
         } else {
             speechText += getAllScoresAsSpeechText(game.getAllScoresInDescndingOrder());
         }
