@@ -2,9 +2,9 @@ GetEventIntent find event {Event}
 
 GetCategoryIntent find category {Category}
 
-GetEventCategoryIntent find event {Event} of category type {Category}
+GetEventCategoryIntent find category type {Category} with event with name {Event} 
 
-GetEventTimeRangeIntent find event {Event} for time range {Duration}
+GetEventTimeRangeIntent for time range of {Duration}, find event with name {Event}
 
 GetCategoryTimeRangeIntent find category {Category} for time range {Duration}
 
