@@ -1,6 +1,15 @@
 {
   "intents": [
     {
+      "intent": "GetBlurbIntent",
+      "slots" : [
+      	{
+      		"name": "Blurb",
+      		"type": "AMAZON.LITERAL"
+      	}
+      ]
+    },
+    {
       "intent": "GetEventIntent",
       "slots" : [
       	{
@@ -19,19 +28,6 @@
       ]
     },
     {
-      "intent": "GetEventCategoryIntent",
-      "slots": [
-        {
-        	"name": "Event",
-        	"type": "AMAZON.LITERAL"
-        },
-      	{
-      		"name": "Category",
-      		"type": "CATEGORY_LIST"
-      	}      
-      ]
-    },
-    {
       "intent": "GetEventTimeRangeIntent",
       "slots" : [
       	{
@@ -47,23 +43,6 @@
     {
       "intent": "GetCategoryTimeRangeIntent",
       "slots" : [
-      	{
-      		"name": "Category",
-      		"type": "CATEGORY_LIST"
-      	},
-      	{
-      		"name": "Duration",
-      		"type": "TIME_RANGE_LIST"
-      	}
-      ]
-    },
-    {
-      "intent": "GetEventCategoryTimeRangeIntent",
-      "slots" : [
-        {
-        	"name": "Event",
-        	"type": "AMAZON.LITERAL"
-        },
       	{
       		"name": "Category",
       		"type": "CATEGORY_LIST"

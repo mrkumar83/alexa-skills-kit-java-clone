@@ -25,6 +25,8 @@ public class LocalEventSearchSpeechlet implements Speechlet {
     private static final String SLOT_CATEGORY = "Category";
 
     private static final String SLOT_DURATION = "PlayerName";
+    
+    private static final String SLOT_BLURB = "Blurb";
 
     private static final Logger log = LoggerFactory.getLogger(LocalEventSearchSpeechlet.class);
 
@@ -57,14 +59,12 @@ public class LocalEventSearchSpeechlet implements Speechlet {
             return getQueryResponse(request, session);
         } else if ("GetCategoryIntent".equals(intentName)) {
             return getQueryResponse(request, session);
-        } else if ("GetEventCategoryIntent".equals(intentName)) {
-            return getQueryResponse(request, session);
         } else if ("GetEventTimeRangeIntent".equals(intentName)) {
             return getQueryResponse(request, session);
         } else if ("GetCategoryTimeRangeIntent".equals(intentName)) {
             return getQueryResponse(request, session);
-        } else if ("GetEventCategoryTimeRangeIntent".equals(intentName)) {
-            return getQueryResponse(request, session);
+        } else if ("GetBlurbIntent".equals(intentName)) {
+            return getProcessedQueryResponse(request, session);
         } else {
             throw new SpeechletException("Invalid Intent");
         }
@@ -78,6 +78,23 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         // any cleanup logic goes here
     }
 
+    private SpeechletResponse getProcessedQueryResponse(final IntentRequest request, final Session session) {
+    	
+    	String blurb = request.getIntent().getSlot(SLOT_BLURB) != null ? request.getIntent().getSlot(SLOT_BLURB).getValue() : "no duration";
+    	String queryParameters = "Query Blurb: " + blurb;
+        
+    	// Create the Simple card content.
+        SimpleCard card = new SimpleCard();
+        card.setTitle("QueryParameters");
+        card.setContent(queryParameters);
+        
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(queryParameters);
+    
+        return SpeechletResponse.newTellResponse(speech, card);
+    }
+    
     private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
 
         String duration = request.getIntent().getSlot(SLOT_DURATION) != null ? request.getIntent().getSlot(SLOT_DURATION).getValue() : "no duration";

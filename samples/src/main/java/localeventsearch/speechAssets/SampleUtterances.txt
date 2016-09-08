@@ -1,20 +1,11 @@
+
 GetEventIntent find event {The Carole King Musical|Event}
+
+GetEventTimeRangeIntent find event {The Carole King Musical|Event} happening in the {Duration}
 
 GetCategoryIntent find category {Category}
 
-GetCategoryIntent find events of type {Category}
-
-GetEventCategoryIntent find category type {Category} with event with name {The Carole King Musical|Event}
-
-GetEventTimeRangeIntent for time range of {Duration} find event with name {The Carole King Musical|Event}
-
-
-GetCategoryTimeRangeIntent locate {Category} {Duration}
 GetCategoryTimeRangeIntent find {Category} in the {Duration}
-GetCategoryTimeRangeIntent find {Category} happening in the {Duration}
-GetCategoryTimeRangeIntent find category {Category} for time range {Duration}
+GetCategoryTimeRangeIntent find category {Category} happening in the {Duration}
 
-GetEventCategoryTimeRangeIntent find event {The Carole King Musical|Event} of category type {Category} for time range {Duration}
-GetEventCategoryTimeRangeIntent find {Category} in the {Duration} named {Event}
-
-
+GetBlurbIntent locate {Blurb}
