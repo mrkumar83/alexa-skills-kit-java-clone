@@ -185,21 +185,23 @@ public class LoadData {
 				e.locationString = m.group(2);
 				e.date = new SimpleDateFormat(POLLSTAR_EVENT_DATE_FORMAT).parse(m2.group(1));
 				e.eventType = EventType.CONCERT; //TODO
-				e.popularity = 2;
+				e.popularity = (short)(Math.random() * 6);
 				e.source = eElement.getElementsByTagName("link").item(0).getTextContent();
 				e.id = eElement.getElementsByTagName("guid").item(0).getTextContent().replaceAll("E:", "");
-				if (eventExists(e)) {
-					continue;
-				}
+//				if (eventExists(e)) {
+//				System.out.println("Event exists. skipping");
+//					continue;
+//				}
 				Location location = getLocationForEvent(e, getCity(city));
 				if (location == null) {
 					// skip this element
-					System.out.println("Event exists. skipping");
+					System.out.println("Location not found. skipping");
 					continue;
 				}
 				e.latitude = location.latitude;
 				e.longitude = location.longitude;
 				e.locationAddress = location.address;
+				e.location = String.format("%f, %f", location.latitude, location.longitude);
 				addToIndex(e);
 				System.out.println(e);
 			}
@@ -241,30 +243,31 @@ public class LoadData {
 		Location l;
 		if (result.getTotal() == 0) {
 			// get from google
-			String googleResponse = readUrlToString(String.format(GOOGLE_MAPS_QUERY, URLEncoder.encode(e.locationString.replaceAll(" ", "+"), "UTF-8"), city.latitude, city.longitude, googleMapsKey));
-			System.out.println("Contacted google for " + e.locationString);
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode node = objectMapper.readValue(googleResponse, JsonNode.class);
-			try {
-				JsonNode googleResult = node.get("results").elements().next();
-				l = new Location();
-				l.address = googleResult.get("formatted_address").asText();
-				l.rating = googleResult.get("rating") != null? googleResult.get("rating").asDouble():0;
-				l.name = e.locationString;
-				l.latitude = ((JsonNode)((JsonNode)googleResult.get("geometry")).get("location")).get("lat").asDouble();
-				l.longitude = ((JsonNode)((JsonNode)googleResult.get("geometry")).get("location")).get("lng").asDouble();
-				l.city = city.name;
-				l.id = Long.toString(System.currentTimeMillis());
-				//put in index
-				Index index = new Index.Builder(l).index(LOCATION_CACHE_INDEX).type(LOCATION_CACHE_INDEX).build();
-				DocumentResult r = es.execute(index);
-				if (!r.isSucceeded()) {
-					throw new Exception("Bad Request:" + r.getErrorMessage());
-				}
-			} catch (NoSuchElementException exception) {
-				System.out.println("No Results in google for " + e.locationString);
-				return null;
-			}
+//			String googleResponse = readUrlToString(String.format(GOOGLE_MAPS_QUERY, URLEncoder.encode(e.locationString.replaceAll(" ", "+"), "UTF-8"), city.latitude, city.longitude, googleMapsKey));
+//			System.out.println("Contacted google for " + e.locationString);
+//			ObjectMapper objectMapper = new ObjectMapper();
+//			JsonNode node = objectMapper.readValue(googleResponse, JsonNode.class);
+//			try {
+//				JsonNode googleResult = node.get("results").elements().next();
+//				l = new Location();
+//				l.address = googleResult.get("formatted_address").asText();
+//				l.rating = googleResult.get("rating") != null? googleResult.get("rating").asDouble():0;
+//				l.name = e.locationString;
+//				l.latitude = ((JsonNode)((JsonNode)googleResult.get("geometry")).get("location")).get("lat").asDouble();
+//				l.longitude = ((JsonNode)((JsonNode)googleResult.get("geometry")).get("location")).get("lng").asDouble();
+//				l.city = city.name;
+//				l.id = Long.toString(System.currentTimeMillis());
+//				//put in index
+//				Index index = new Index.Builder(l).index(LOCATION_CACHE_INDEX).type(LOCATION_CACHE_INDEX).build();
+//				DocumentResult r = es.execute(index);
+//				if (!r.isSucceeded()) {
+//					throw new Exception("Bad Request:" + r.getErrorMessage());
+//				}
+//			} catch (NoSuchElementException exception) {
+//				System.out.println("No Results in google for " + e.locationString);
+//				return null;
+//			}
+			return null;
 		} else {
 			l = result.getFirstHit(Location.class).source;
 			System.out.println(String.format("Found location %s, query was for %s", l.name, e.locationString));
