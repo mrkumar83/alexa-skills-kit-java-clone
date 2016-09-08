@@ -30,6 +30,6 @@ public final class LocalEventSearchSpeechletRequestStreamHandler extends Speechl
 
     public LocalEventSearchSpeechletRequestStreamHandler() {
         //super(new ScoreKeeperSpeechlet(), supportedApplicationIds);
-        super(new HelloWorldSpeechlet(), supportedApplicationIds);
+        super(new LocalEventSearchSpeechlet(), supportedApplicationIds);
     }
 }
