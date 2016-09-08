@@ -6,7 +6,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -34,6 +33,8 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import model.Event;
+import model.EventType;
 
 public class LoadData {
 	
@@ -59,10 +60,6 @@ public class LoadData {
 				.multiThreaded(true)
 				.build());
 		es = factory.getObject();
-	}
-	
-	private static enum EventType {
-			CONCERT
 	}
 	
 	public static class City {
@@ -147,29 +144,6 @@ public class LoadData {
 		public void setId(String id) {
 			this.id = id;
 		}
-		
-	}
-	
-	public static class Event {
-		@JestId
-		String id;
-		String description;
-		String locationString;
-		String locationAddress;
-		double latitude;
-		double longitude;
-		short popularity;
-		EventType eventType;
-		Date date;
-		String source;
-		
-		@Override
-		public String toString() {
-			return "Event [id=" + id + ", description=" + description + ", locationString=" + locationString + ", latitude=" + latitude
-					+ ", longitude=" + longitude + ", popularity=" + popularity + ", eventType=" + eventType + ", date="
-					+ date + "]";
-		}
-		
 		
 	}
 	
