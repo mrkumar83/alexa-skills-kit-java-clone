@@ -1,4 +1,3 @@
-
 GetEventIntent find event {The Carole King Musical|Event}
 
 GetEventTimeRangeIntent find event {The Carole King Musical|Event} happening in the {Duration}
@@ -8,4 +7,4 @@ GetCategoryIntent find category {Category}
 GetCategoryTimeRangeIntent find {Category} in the {Duration}
 GetCategoryTimeRangeIntent find category {Category} happening in the {Duration}
 
-GetBlurbIntent locate {Blurb}
+GetBlurbIntent locate {cool stuff happening|Blurb}
