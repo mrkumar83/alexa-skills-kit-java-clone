@@ -8,6 +8,8 @@ GetEventCategoryIntent find category type {Category} with event with name {The C
 
 GetEventTimeRangeIntent for time range of {Duration} find event with name {The Carole King Musical|Event}
 
+
+GetCategoryTimeRangeIntent locate {Category} {Duration}
 GetCategoryTimeRangeIntent find {Category} in the {Duration}
 GetCategoryTimeRangeIntent find category {Category} for time range {Duration}
 
