@@ -1,5 +1,6 @@
 GetEventIntent find event {The Carole King Musical|Event}
 
+GetEventTimeRangeIntent find event {Hackathon|Event} happening in the {Duration}
 GetEventTimeRangeIntent find event {The Carole King Musical|Event} happening in the {Duration}
 
 GetCategoryIntent find category {Category}
