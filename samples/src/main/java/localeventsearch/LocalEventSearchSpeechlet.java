@@ -19,7 +19,14 @@ import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
 
 public class LocalEventSearchSpeechlet implements Speechlet {
-    private static final Logger log = LoggerFactory.getLogger(HelloWorldSpeechlet.class);
+	
+    private static final String SLOT_EVENT = "Event";
+
+    private static final String SLOT_CATEGORY = "Category";
+
+    private static final String SLOT_DURATION = "PlayerName";
+
+    private static final Logger log = LoggerFactory.getLogger(LocalEventSearchSpeechlet.class);
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -70,19 +77,28 @@ public class LocalEventSearchSpeechlet implements Speechlet {
                 session.getSessionId());
         // any cleanup logic goes here
     }
-    
-    private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
-    	
-        String speechText = "Hello world. We be processing queries!";
 
+    private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
+    	        
+        String duration = request.getIntent().getSlot(SLOT_DURATION).getValue();
+        duration = duration == null ? "no duration" : duration;
+        
+        String category = request.getIntent().getSlot(SLOT_CATEGORY).getValue();
+        category = category == null ? "no category" : category;
+        
+        String event = request.getIntent().getSlot(SLOT_EVENT).getValue();
+        event = event == null ? "no event" : event;
+
+        String queryParameters = "Category: " + category + " " + "Event: " + event + " " + "Duration: " + duration;
+        
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
-        card.setTitle("HelloWorld");
-        card.setContent(speechText);
+        card.setTitle("QueryParameters");
+        card.setContent(queryParameters);
 
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(speechText);
+        speech.setText(queryParameters);
 
         return SpeechletResponse.newTellResponse(speech, card);
     }
