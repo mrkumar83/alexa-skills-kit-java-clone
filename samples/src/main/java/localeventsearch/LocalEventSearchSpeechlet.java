@@ -47,17 +47,17 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         String intentName = (intent != null) ? intent.getName() : null;
 
         if ("GetEventIntent".equals(intentName)) {
-            return getHelloResponse();
+            return getQueryResponse(request, session);
         } else if ("GetCategoryIntent".equals(intentName)) {
-            return getHelpResponse();
+            return getQueryResponse(request, session);
         } else if ("GetEventCategoryIntent".equals(intentName)) {
-            return getHelpResponse();
+            return getQueryResponse(request, session);
         } else if ("GetEventTimeRangeIntent".equals(intentName)) {
-            return getHelpResponse();
+            return getQueryResponse(request, session);
         } else if ("GetCategoryTimeRangeIntent".equals(intentName)) {
-            return getHelpResponse();
+            return getQueryResponse(request, session);
         } else if ("GetEventCategoryTimeRangeIntent".equals(intentName)) {
-            return getHelpResponse();
+            return getQueryResponse(request, session);
         } else {
             throw new SpeechletException("Invalid Intent");
         }
@@ -69,6 +69,22 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         log.info("onSessionEnded requestId={}, sessionId={}", request.getRequestId(),
                 session.getSessionId());
         // any cleanup logic goes here
+    }
+    
+    private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
+    	
+        String speechText = "Hello world";
+
+        // Create the Simple card content.
+        SimpleCard card = new SimpleCard();
+        card.setTitle("HelloWorld");
+        card.setContent(speechText);
+
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech, card);
     }
 
     /**
@@ -113,29 +129,5 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         speech.setText(speechText);
 
         return SpeechletResponse.newTellResponse(speech, card);
-    }
-
-    /**
-     * Creates a {@code SpeechletResponse} for the help intent.
-     *
-     * @return SpeechletResponse spoken and visual response for the given intent
-     */
-    private SpeechletResponse getHelpResponse() {
-        String speechText = "You can say hello to me!";
-
-        // Create the Simple card content.
-        SimpleCard card = new SimpleCard();
-        card.setTitle("HelloWorld");
-        card.setContent(speechText);
-
-        // Create the plain text output.
-        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(speechText);
-
-        // Create reprompt
-        Reprompt reprompt = new Reprompt();
-        reprompt.setOutputSpeech(speech);
-
-        return SpeechletResponse.newAskResponse(speech, reprompt, card);
     }
 }
