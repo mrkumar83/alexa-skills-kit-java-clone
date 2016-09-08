@@ -2,6 +2,7 @@ package localeventsearch;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import localeventsearch.storage.Event;
 
@@ -88,21 +89,57 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         // any cleanup logic goes here
     }
     
+    public static boolean isSameDay(Date date1, Date date2) {
+        if (date1 == null || date2 == null) {
+            throw new IllegalArgumentException("The dates must not be null");
+        }
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        return isSameDay(cal1, cal2);
+    }
+    
+    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+        if (cal1 == null || cal2 == null) {
+            throw new IllegalArgumentException("The dates must not be null");
+        }
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+    }
+    
+    public static boolean isToday(Date date) {
+        return isSameDay(date, Calendar.getInstance().getTime());
+    }
+    
+    public static boolean isTomorrow(Date date) {
+    	Calendar cal = Calendar.getInstance();
+    	cal.add(Calendar.DAY_OF_MONTH, 1);
+    	return isSameDay(date, cal.getTime());
+    }
+
     public String buildResponse(Event event) {
     	String queryParameters = "";
         if(event == null) {
         	queryParameters = "No events found. Perhaps a movie on amazon would be to your liking.";
         } else {
         	if(event.date != null) {
-        		SimpleDateFormat format = new SimpleDateFormat("MMMM d");
-        		queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString + " on " + format.format(event.date);
+        		if(isToday(event.date)) {
+        			queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString + " today.";
+        		} else if(isTomorrow(event.date)) {
+        			queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString + " tomorrow.";
+        		} else {
+        			SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        			queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString + " on " + format.format(event.date);
+        		}
         	} else {
         		queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString;
         	}
         }
     	return queryParameters;
     }
-    
+
     private SpeechletResponse getProcessedQueryResponse(final IntentRequest request, final Session session) throws Exception {
     	
     	String blurb = request.getIntent().getSlot(SLOT_BLURB) != null ? request.getIntent().getSlot(SLOT_BLURB).getValue() : "no duration";
