@@ -57,11 +57,13 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 			queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.rangeQuery("date").from(new Date()).to(eventDateGap.getDateForFilter())).must(queryBuilder);
 		} else {
 			// boost recent
-			queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.functionScoreQuery(queryBuilder).boost(5).add(ScoreFunctionBuilders.gaussDecayFunction("date", new Date(), "1d")));
+			queryBuilder = QueryBuilders.boolQuery().should(QueryBuilders.functionScoreQuery(queryBuilder).boost(5).add(ScoreFunctionBuilders.gaussDecayFunction("date", new Date(), "1d")));
 		}
 		
 		// boost close
-//		TODO: queryBuilder = QueryBuilders.boolQuery().must(queryBuilder).should(generateDistanceBoost());
+		queryBuilder = QueryBuilders.boolQuery().must(queryBuilder).should(generateDistanceBoost());
+		
+		// TODO: Boost by popularity
 		
 		searchSourceBuilder.query(queryBuilder);
 		System.out.println("Query: " + searchSourceBuilder.toString());
@@ -115,8 +117,11 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 
 
 	private QueryBuilder generateDistanceBoost() {
-//		QueryBuilders.boolQuery().must(QueryBuilders.geoDistanceRangeQuery("").)
-		return null;
+		return QueryBuilders.boolQuery()
+			.should(QueryBuilders.boolQuery().boost(10).should(QueryBuilders.geoDistanceRangeQuery("location").from("0km").to("10km").point(DEFAULT_LOCATION_LAT_LONG[0], DEFAULT_LOCATION_LAT_LONG[1])))
+			.should(QueryBuilders.boolQuery().boost(5).should(QueryBuilders.geoDistanceRangeQuery("location").from("10km").to("25km").point(DEFAULT_LOCATION_LAT_LONG[0], DEFAULT_LOCATION_LAT_LONG[1])))
+			.should(QueryBuilders.boolQuery().boost(2).should(QueryBuilders.geoDistanceRangeQuery("location").from("25km").to("50km").point(DEFAULT_LOCATION_LAT_LONG[0], DEFAULT_LOCATION_LAT_LONG[1])))
+			.should(QueryBuilders.boolQuery().boost(-5).should(QueryBuilders.geoDistanceRangeQuery("location").from("200km").point(DEFAULT_LOCATION_LAT_LONG[0], DEFAULT_LOCATION_LAT_LONG[1])));
 	}
 
 	private EventDateGap extractEventDateGap(String query)  throws Exception{
@@ -166,43 +171,46 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	
 	public static void main(String[] args) throws Exception {
 		LocalEventSearchServiceImpl service = new LocalEventSearchServiceImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
-		service.findEventList("jazz concerts tonight");
-		service.findEventList("jazz concerts");
-		service.findEventList("Metallica concerts");
-		service.findEventList("jazz this month");
-		service.findEventList("jazz this week");
-		service.findEventList("jazz this tonight");
-		service.findEventList("tonight");
-		
-		service.findEvent("jazz concerts tonight");
-		service.findEvent("jazz concerts");
-		service.findEvent("Metallica concerts");
-		service.findEvent("jazz this month");
-		service.findEvent("jazz this week");
-		service.findEvent("jazz this tonight");
-		service.findEvent("tonight");
-		
-		service.findEventList("concerts", "jazz", "tonight");
-		service.findEventList("concerts", "jazz", "");
-		service.findEventList("concerts", "jazz", null);
-		service.findEventList("concerts", "Metallica", null);
-		service.findEventList("", "jazz", "this month");
-		service.findEventList(null, "jazz", "this month");
-		service.findEventList(null, "jazz", "this week");
-		service.findEventList(null, "jazz", "tonight");
-		service.findEventList(null, "", "tonight");
-		service.findEventList("", null, "tonight");
-		
-		service.findEvent("concerts", "jazz", "tonight");
-		service.findEvent("concerts", "jazz", "");
-		service.findEvent("concerts", "jazz", null);
-		service.findEvent("concerts", "Metallica", null);
-		service.findEvent("", "jazz", "this month");
-		service.findEvent(null, "jazz", "this month");
-		service.findEvent(null, "jazz", "this week");
-		service.findEvent(null, "jazz", "tonight");
-		service.findEvent(null, "", "tonight");
-		service.findEvent("", null, "tonight");
+//		service.findEventList("jazz concerts this month");
+//		service.findEventList("concerts this week");
+		service.findEventList("metallica");
+//		service.findEventList("journey tribute");
+//		service.findEventList("jazz concerts");
+//		service.findEventList("Metallica concerts");
+//		service.findEventList("jazz this month");
+//		service.findEventList("jazz this week");
+//		service.findEventList("jazz this tonight");
+//		service.findEventList("tonight");
+//		
+//		service.findEvent("jazz concerts tonight");
+//		service.findEvent("jazz concerts");
+//		service.findEvent("Metallica concerts");
+//		service.findEvent("jazz this month");
+//		service.findEvent("jazz this week");
+//		service.findEvent("jazz this tonight");
+//		service.findEvent("tonight");
+//		
+//		service.findEventList("concerts", "jazz", "tonight");
+//		service.findEventList("concerts", "jazz", "");
+//		service.findEventList("concerts", "jazz", null);
+//		service.findEventList("concerts", "Metallica", null);
+//		service.findEventList("", "jazz", "this month");
+//		service.findEventList(null, "jazz", "this month");
+//		service.findEventList(null, "jazz", "this week");
+//		service.findEventList(null, "jazz", "tonight");
+//		service.findEventList(null, "", "tonight");
+//		service.findEventList("", null, "tonight");
+//		
+//		service.findEvent("concerts", "jazz", "tonight");
+//		service.findEvent("concerts", "jazz", "");
+//		service.findEvent("concerts", "jazz", null);
+//		service.findEvent("concerts", "Metallica", null);
+//		service.findEvent("", "jazz", "this month");
+//		service.findEvent(null, "jazz", "this month");
+//		service.findEvent(null, "jazz", "this week");
+//		service.findEvent(null, "jazz", "tonight");
+//		service.findEvent(null, "", "tonight");
+//		service.findEvent("", null, "tonight");
 	}
 
 	@Override

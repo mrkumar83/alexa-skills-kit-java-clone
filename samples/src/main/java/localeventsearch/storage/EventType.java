@@ -5,7 +5,6 @@ public enum EventType {
 
 
 	private String[] keywords;
-	private int calendarElement;
 
 	EventType(String[] keywords) {
 		this.keywords = keywords;
