@@ -1,12 +1,14 @@
 package localeventsearch;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
@@ -15,6 +17,7 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.SearchResult.Hit;
 import localeventsearch.storage.Event;
 import localeventsearch.storage.EventDateGap;
 import localeventsearch.storage.EventType;
@@ -34,12 +37,6 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 				.build());
 		es = factory.getObject();
 	}
-	
-	@Override
-	public Event findEvent(String category, String eventName, String timeGap)  throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/* 
 	 * Cases covered: 
@@ -49,7 +46,7 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	 */
 	
 	@Override
-	public Event findEvent(String query) throws Exception {
+	public List<Event> findEventList(String query) throws Exception {
 		Objects.nonNull(query);
 		query = query.toLowerCase();
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -103,7 +100,10 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 		if (result.getTotal() == 0) {
 			return null;
 		}
-		return result.getFirstHit(Event.class).source;
+		final List<Event> events = new ArrayList<>();
+		result.getHits(Event.class).forEach(hit -> events.add(hit.source));
+		return events;
+//		return result.getFirstHit(Event.class).source;
 	}
 
 
@@ -153,6 +153,24 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 		service.findEvent("jazz this week");
 		service.findEvent("jazz this tonight");
 		service.findEvent("tonight");
+	}
+
+	@Override
+	public Event findEvent(String category, String eventName, String timeGap) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Event> findEventList(String category, String eventName, String timeGap) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Event findEvent(String query) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
