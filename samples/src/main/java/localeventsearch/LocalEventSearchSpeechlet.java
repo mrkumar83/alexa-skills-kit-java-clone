@@ -73,7 +73,7 @@ public class LocalEventSearchSpeechlet implements Speechlet {
     
     private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
     	
-        String speechText = "Hello world";
+        String speechText = "Hello world. We be processing queries!";
 
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
