@@ -1,5 +1,7 @@
 package localeventsearch;
 
+import helloworld.HelloWorldSpeechlet;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +29,7 @@ public final class LocalEventSearchSpeechletRequestStreamHandler extends Speechl
     }
 
     public LocalEventSearchSpeechletRequestStreamHandler() {
-        super(new ScoreKeeperSpeechlet(), supportedApplicationIds);
+        //super(new ScoreKeeperSpeechlet(), supportedApplicationIds);
+        super(new HelloWorldSpeechlet(), supportedApplicationIds);
     }
 }
