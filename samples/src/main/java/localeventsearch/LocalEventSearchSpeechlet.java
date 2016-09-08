@@ -1,7 +1,9 @@
 package localeventsearch;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import localeventsearch.storage.Event;
-import helloworld.HelloWorldSpeechlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,8 @@ public class LocalEventSearchSpeechlet implements Speechlet {
 
     private static final Logger log = LoggerFactory.getLogger(LocalEventSearchSpeechlet.class);
     
-    LocalEventSearchService localEventSearchService = new MockLocalEventSearchService();
+    //LocalEventSearchService localEventSearchService = new MockLocalEventSearchService();
+    LocalEventSearchService localEventSearchService = new LocalEventSearchServiceImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -85,10 +88,30 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         // any cleanup logic goes here
     }
     
-    private SpeechletResponse getProcessedQueryResponse(final IntentRequest request, final Session session) {
+    public String buildResponse(Event event) {
+    	String queryParameters = "";
+        if(event == null) {
+        	queryParameters = "No events found. Perhaps a movie on amazon would be to your liking.";
+        } else {
+        	if(event.date != null) {
+        		SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        		queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString + " on " + format.format(event.date);
+        	} else {
+        		queryParameters = "LocalFinder found the following. " + event.description + " is happening at " + event.locationString;
+        	}
+        }
+    	return queryParameters;
+    }
+    
+    private SpeechletResponse getProcessedQueryResponse(final IntentRequest request, final Session session) throws Exception {
     	
     	String blurb = request.getIntent().getSlot(SLOT_BLURB) != null ? request.getIntent().getSlot(SLOT_BLURB).getValue() : "no duration";
-    	String queryParameters = "Query Blurb: " + blurb;
+    	
+    	//String queryParameters = "Query Blurb: " + blurb;
+        Event event = localEventSearchService.findEvent(blurb);
+        
+        String queryParameters = buildResponse(event);
+
         
     	// Create the Simple card content.
         SimpleCard card = new SimpleCard();
@@ -111,9 +134,9 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         String event = request.getIntent().getSlot(SLOT_EVENT) != null ? request.getIntent().getSlot(SLOT_EVENT).getValue() : "no event";
 
         Event retEvent = localEventSearchService.findEvent(category, event, duration);
-                
-        String queryParameters = "LocalFinder found the following. " + retEvent.description + " is happening at " + retEvent.locationString + " in the " + duration;
-
+        
+        String queryParameters = buildResponse(retEvent);
+        
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
         card.setTitle("QueryParameters");
