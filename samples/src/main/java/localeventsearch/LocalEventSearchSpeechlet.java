@@ -46,9 +46,17 @@ public class LocalEventSearchSpeechlet implements Speechlet {
         Intent intent = request.getIntent();
         String intentName = (intent != null) ? intent.getName() : null;
 
-        if ("HelloWorldIntent".equals(intentName)) {
+        if ("GetEventIntent".equals(intentName)) {
             return getHelloResponse();
-        } else if ("AMAZON.HelpIntent".equals(intentName)) {
+        } else if ("GetCategoryIntent".equals(intentName)) {
+            return getHelpResponse();
+        } else if ("GetEventCategoryIntent".equals(intentName)) {
+            return getHelpResponse();
+        } else if ("GetEventTimeRangeIntent".equals(intentName)) {
+            return getHelpResponse();
+        } else if ("GetCategoryTimeRangeIntent".equals(intentName)) {
+            return getHelpResponse();
+        } else if ("GetEventCategoryTimeRangeIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
