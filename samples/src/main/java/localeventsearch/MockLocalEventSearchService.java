@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import localeventsearch.storage.Event;
 import localeventsearch.storage.EventType;
@@ -36,7 +37,7 @@ public class MockLocalEventSearchService implements LocalEventSearchService {
 	public Event findEvent(String category, String eventName, String timeGap) {
 		Event retEvent = new Event();
 		retEvent.id = "2978624";
-		retEvent.description = "Davell Crawford";
+		retEvent.description = eventName;
 		retEvent.locationString = "Yoshi's Oakland";
 		retEvent.locationAddress = "510 Embarcadero West, Oakland, CA 94607, United States";
 		retEvent.latitude = 37.79637749999999;
@@ -83,6 +84,13 @@ public class MockLocalEventSearchService implements LocalEventSearchService {
 		retEvent.date = new Date();
 		retEvent.source = "http://www.pollstar.com/event/2994230&source=rss";
 		return retEvent;
+	}
+
+	@Override
+	public List<Event> findEventList(String category, String eventName,
+			String timeGap) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
