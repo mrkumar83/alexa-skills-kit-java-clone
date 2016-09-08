@@ -1,6 +1,6 @@
 package localeventsearch;
 
-import model.Event;
+import localeventsearch.storage.Event;
 
 public interface LocalEventSearchService {
 

@@ -1,4 +1,4 @@
-package model;
+package localeventsearch.storage;
 
 import java.util.Date;
 
