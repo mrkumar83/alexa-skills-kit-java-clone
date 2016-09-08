@@ -24,7 +24,7 @@ public class LocalEventSearchSpeechlet implements Speechlet {
 
     private static final String SLOT_CATEGORY = "Category";
 
-    private static final String SLOT_DURATION = "PlayerName";
+    private static final String SLOT_DURATION = "Duration";
     
     private static final String SLOT_BLURB = "Blurb";
 
