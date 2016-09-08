@@ -37,30 +37,11 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 				.build());
 		es = factory.getObject();
 	}
-
-	/* 
-	 * Cases covered: 
-	 * "EVENT_TYPE". For example "concerts"
-	 * "EVENT_TYPE DATE_GAP". For example "concerts this week"
-	 * "QUERY EVENT_TYPE DATE_GAP". For example "Metallica concerts this month"
-	 */
 	
-	@Override
-	public List<Event> findEventList(String query) throws Exception {
-		Objects.nonNull(query);
+	private List<Event> findEventList(EventType eventType, EventDateGap eventDateGap, String query) throws Exception {
 		query = query.toLowerCase();
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 		
-		EventType eventType = extractEventType(query);
-		if (eventType != null) {
-			query = eventType.removeEventTypeKeywords(query);
-		}
-		
-		EventDateGap eventDateGap = extractEventDateGap(query);
-		
-		if (eventDateGap != null) {
-			query = eventDateGap.removeTimeGapKeywords(query);
-		}
 		// Don't show past events
 		QueryBuilder queryBuilder = QueryBuilders.rangeQuery("date").from(new Date()); 
 		if (query.trim().length() > 0) {
@@ -97,13 +78,40 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 			throw new RuntimeException("Search failed with error: " + result.getErrorMessage());
 		}
 		System.out.println("Search result: " + result.getJsonString());
-		if (result.getTotal() == 0) {
-			return null;
-		}
+//		if (result.getTotal() == 0) {
+//			return null;
+//		}
 		final List<Event> events = new ArrayList<>();
 		result.getHits(Event.class).forEach(hit -> events.add(hit.source));
 		return events;
 //		return result.getFirstHit(Event.class).source;
+	}
+	
+
+	/* 
+	 * Cases covered: 
+	 * "EVENT_TYPE". For example "concerts"
+	 * "EVENT_TYPE DATE_GAP". For example "concerts this week"
+	 * "QUERY EVENT_TYPE DATE_GAP". For example "Metallica concerts this month"
+	 */
+	
+	@Override
+	public List<Event> findEventList(String query) throws Exception {
+		Objects.nonNull(query);
+		query = query.toLowerCase();
+		
+		EventType eventType = extractEventType(query);
+		if (eventType != null) {
+			query = eventType.removeEventTypeKeywords(query);
+		}
+		
+		EventDateGap eventDateGap = extractEventDateGap(query);
+		
+		if (eventDateGap != null) {
+			query = eventDateGap.removeTimeGapKeywords(query);
+		}
+		return findEventList(eventType, eventDateGap, query);
+		
 	}
 
 
@@ -114,6 +122,9 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	}
 
 	private EventDateGap extractEventDateGap(String query)  throws Exception{
+		if (query == null) {
+			return null;
+		}
 		for (EventDateGap type:EventDateGap.values()) {
 			String q = type.removeTimeGapKeywords(query);
 			if (!q.equals(query)) {
@@ -129,6 +140,9 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	 * Very simple implementation for now
 	 */
 	private EventType extractEventType(String query) {
+		if (query == null) {
+			return null;
+		}
 		for (EventType type:EventType.values()) {
 			if (query.contains(type.name().toLowerCase())) {
 				return type;
@@ -144,8 +158,24 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 		return null;
 	}
 	
+
+	@Override
+	public List<Event> findEventList(String category, String eventName, String timeGap) throws Exception {
+		EventType eventType = extractEventType(category != null ?category.toLowerCase():null);
+		EventDateGap eventDateGap = extractEventDateGap(timeGap != null ?timeGap.toLowerCase():null);
+		return findEventList(eventType, eventDateGap, eventName != null? eventName.toLowerCase():"");
+	}
+	
 	public static void main(String[] args) throws Exception {
 		LocalEventSearchServiceImpl service = new LocalEventSearchServiceImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
+		service.findEventList("jazz concerts tonight");
+		service.findEventList("jazz concerts");
+		service.findEventList("Metallica concerts");
+		service.findEventList("jazz this month");
+		service.findEventList("jazz this week");
+		service.findEventList("jazz this tonight");
+		service.findEventList("tonight");
+		
 		service.findEvent("jazz concerts tonight");
 		service.findEvent("jazz concerts");
 		service.findEvent("Metallica concerts");
@@ -153,24 +183,46 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 		service.findEvent("jazz this week");
 		service.findEvent("jazz this tonight");
 		service.findEvent("tonight");
+		
+		service.findEventList("concerts", "jazz", "tonight");
+		service.findEventList("concerts", "jazz", "");
+		service.findEventList("concerts", "jazz", null);
+		service.findEventList("concerts", "Metallica", null);
+		service.findEventList("", "jazz", "this month");
+		service.findEventList(null, "jazz", "this month");
+		service.findEventList(null, "jazz", "this week");
+		service.findEventList(null, "jazz", "tonight");
+		service.findEventList(null, "", "tonight");
+		service.findEventList("", null, "tonight");
+		
+		service.findEvent("concerts", "jazz", "tonight");
+		service.findEvent("concerts", "jazz", "");
+		service.findEvent("concerts", "jazz", null);
+		service.findEvent("concerts", "Metallica", null);
+		service.findEvent("", "jazz", "this month");
+		service.findEvent(null, "jazz", "this month");
+		service.findEvent(null, "jazz", "this week");
+		service.findEvent(null, "jazz", "tonight");
+		service.findEvent(null, "", "tonight");
+		service.findEvent("", null, "tonight");
 	}
 
 	@Override
 	public Event findEvent(String category, String eventName, String timeGap) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Event> findEventList(String category, String eventName, String timeGap) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<Event> events = findEventList(category, eventName, timeGap);
+		if (events.isEmpty()) {
+			return null;
+		}
+		return events.get(0);
 	}
 
 	@Override
 	public Event findEvent(String query) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<Event> events = findEventList(query);
+		if (events.isEmpty()) {
+			return null;
+		}
+		return events.get(0);
 	}
 
 }
