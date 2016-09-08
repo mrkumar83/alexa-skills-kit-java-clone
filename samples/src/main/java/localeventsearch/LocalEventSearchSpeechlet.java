@@ -79,18 +79,15 @@ public class LocalEventSearchSpeechlet implements Speechlet {
     }
 
     private SpeechletResponse getQueryResponse(final IntentRequest request, final Session session) {
-    	        
-        String duration = request.getIntent().getSlot(SLOT_DURATION).getValue();
-        duration = duration == null ? "no duration" : duration;
-        
-        String category = request.getIntent().getSlot(SLOT_CATEGORY).getValue();
-        category = category == null ? "no category" : category;
-        
-        String event = request.getIntent().getSlot(SLOT_EVENT).getValue();
-        event = event == null ? "no event" : event;
+
+        String duration = request.getIntent().getSlot(SLOT_DURATION) != null ? request.getIntent().getSlot(SLOT_DURATION).getValue() : "no duration";
+
+        String category = request.getIntent().getSlot(SLOT_CATEGORY) != null ? request.getIntent().getSlot(SLOT_CATEGORY).getValue() : "no category";
+
+        String event = request.getIntent().getSlot(SLOT_EVENT) != null ? request.getIntent().getSlot(SLOT_EVENT).getValue() : "no event";
 
         String queryParameters = "Category: " + category + " " + "Event: " + event + " " + "Duration: " + duration;
-        
+
         // Create the Simple card content.
         SimpleCard card = new SimpleCard();
         card.setTitle("QueryParameters");
