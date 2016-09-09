@@ -1,1 +1,28 @@
-User: "Alexa, use local finder to..."
+Use Cases:
+
+General Search: "Alexa, use local finder to locate <general phrase>"
+"Alexa, use local finder to find event tribute to the beatles"
+"Alexa, use local finder to find event journey revisited"
+
+Event Search: "Alexa, use local finder to find event <event phrase>"
+"Alexa, use local finder to locate jazz concerts this month"
+"Alexa, use local finder to locate concerts this week"
+"Alexa, use local finder to locate metallica concerts"
+
+
+Create AWS Account: <tbd>
+
+Create Amazon Developer Account: <tbd>
+
+Setup IAM Roles: <tbd>
+
+Setup Dynamo DB: <tbd>
+
+Setup ES Cluster: <tbd>
+
+Setup Lambda Function: <tbd>
+
+Setup Alexa Skill: <tbd>
+
+Deploying Your Skill To Alexa Device: <tbd>
+
