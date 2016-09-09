@@ -1,8 +1,6 @@
-package localeventsearch;
+package localeventsearch.storage;
 
 import java.util.List;
-
-import localeventsearch.storage.Event;
 
 public interface LocalEventSearchService {
 

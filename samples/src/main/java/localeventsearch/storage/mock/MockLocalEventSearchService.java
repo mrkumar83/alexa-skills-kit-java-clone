@@ -1,4 +1,4 @@
-package localeventsearch;
+package localeventsearch.storage.mock;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,6 +8,7 @@ import java.util.List;
 
 import localeventsearch.storage.Event;
 import localeventsearch.storage.EventType;
+import localeventsearch.storage.LocalEventSearchService;
 
 public class MockLocalEventSearchService implements LocalEventSearchService {
 	

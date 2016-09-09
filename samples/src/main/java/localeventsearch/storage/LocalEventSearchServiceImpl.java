@@ -1,4 +1,4 @@
-package localeventsearch;
+package localeventsearch.storage;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,9 +16,6 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-import localeventsearch.storage.Event;
-import localeventsearch.storage.EventDateGap;
-import localeventsearch.storage.EventType;
 
 public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	

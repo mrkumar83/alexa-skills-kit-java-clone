@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import localeventsearch.storage.Event;
+import localeventsearch.storage.LocalEventSearchService;
+import localeventsearch.storage.LocalEventSearchServiceImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
