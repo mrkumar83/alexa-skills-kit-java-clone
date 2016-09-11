@@ -8,9 +8,9 @@ import java.util.List;
 
 import localeventsearch.storage.Event;
 import localeventsearch.storage.EventType;
-import localeventsearch.storage.LocalEventSearchService;
+import localeventsearch.storage.LocalEventSearchElasticsearchClient;
 
-public class MockLocalEventSearchService implements LocalEventSearchService {
+public class MockLocalEventSearchService implements LocalEventSearchElasticsearchClient {
 	
 	/*
 	{

@@ -5,8 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import localeventsearch.storage.Event;
-import localeventsearch.storage.LocalEventSearchService;
-import localeventsearch.storage.LocalEventSearchServiceImpl;
+import localeventsearch.storage.LocalEventSearchElasticsearchClient;
+import localeventsearch.storage.LocalEventSearchElasticsearchClientImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class LocalEventSearchSpeechlet implements Speechlet {
     private static final Logger log = LoggerFactory.getLogger(LocalEventSearchSpeechlet.class);
     
     //LocalEventSearchService localEventSearchService = new MockLocalEventSearchService();
-    LocalEventSearchService localEventSearchService = new LocalEventSearchServiceImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
+    LocalEventSearchElasticsearchClient localEventSearchService = new LocalEventSearchElasticsearchClientImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)

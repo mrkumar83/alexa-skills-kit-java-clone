@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+
+import com.amazonaws.services.elasticsearch.AWSElasticsearchClient;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -17,14 +20,16 @@ import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-public class LocalEventSearchServiceImpl implements LocalEventSearchService {
-	
+public class LocalEventSearchElasticsearchClientImpl implements LocalEventSearchElasticsearchClient {
+
+	AWSElasticsearchClient awsESConfigClient; //cluster configuration, health information
+	Client esSearchClient; //es client for 2.3
+	private final JestClient es; //simple rest client, http://blogs.justenougharchitecture.com/using-jest-as-a-rest-based-java-client-with-elasticsearch/
+
 	// Palo Alto
 	private final static double[] DEFAULT_LOCATION_LAT_LONG = new double[]{37.4419, -122.1430};
-	
-	private final JestClient es;
-	
-	public LocalEventSearchServiceImpl(String elasticsearch) {
+
+	public LocalEventSearchElasticsearchClientImpl(String elasticsearch) {
 		JestClientFactory factory = new JestClientFactory();
 		factory.setHttpClientConfig(new HttpClientConfig
 				.Builder(elasticsearch)
@@ -167,7 +172,7 @@ public class LocalEventSearchServiceImpl implements LocalEventSearchService {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		LocalEventSearchServiceImpl service = new LocalEventSearchServiceImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
+		LocalEventSearchElasticsearchClientImpl service = new LocalEventSearchElasticsearchClientImpl("http://search-events-cluster-vimfcvl2qetqqffdguwtmcdmym.us-east-1.es.amazonaws.com");
 //		service.findEventList("jazz concerts this month");
 //		service.findEventList("concerts this week");
 		service.findEventList("metallica");
